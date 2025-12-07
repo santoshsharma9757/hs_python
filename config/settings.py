@@ -38,14 +38,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    "kotha_chahiyo",
+    "account",
     "todo",
-    'account',
     # SimpleJWT for JWT authentication
-    'rest_framework_simplejwt',
+    "rest_framework_simplejwt",
     # Token blacklist app - allows us to blacklist tokens on logout
     # This is required for secure logout functionality
-    'rest_framework_simplejwt.token_blacklist',
+    "rest_framework_simplejwt.token_blacklist",
 ]
 
 MIDDLEWARE = [
@@ -105,14 +104,12 @@ DATABASES = {
 REST_FRAMEWORK = {
     # Default authentication method - JWT (JSON Web Token)
     # JWT tokens are more secure and scalable than regular tokens
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     # Default permission - users must be authenticated to access API
     # This can be overridden in individual views if needed
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
 # SimpleJWT Configuration
@@ -122,38 +119,29 @@ from datetime import timedelta
 SIMPLE_JWT = {
     # Access Token: Short-lived token (15 minutes) used for API requests
     # This is the token you send with each request to authenticate
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),
-    
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=15),
     # Refresh Token: Long-lived token (7 days) used to get new access tokens
     # When access token expires, use refresh token to get a new one
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     # Rotate Refresh Tokens: If True, a new refresh token is issued each time you refresh
     # This is more secure - old refresh tokens become invalid
-    'ROTATE_REFRESH_TOKENS': True,
-    
+    "ROTATE_REFRESH_TOKENS": True,
     # Blacklist After Rotation: If True, old refresh tokens are blacklisted
     # This prevents reuse of old tokens if they were stolen
-    'BLACKLIST_AFTER_ROTATION': True,
-    
+    "BLACKLIST_AFTER_ROTATION": True,
     # Algorithm used to sign tokens (HS256 is symmetric, RS256 is asymmetric)
     # HS256 is simpler and works well for most applications
-    'ALGORITHM': 'HS256',
-    
+    "ALGORITHM": "HS256",
     # Secret key for signing tokens (uses Django's SECRET_KEY by default)
-    'SIGNING_KEY': SECRET_KEY,
-    
+    "SIGNING_KEY": SECRET_KEY,
     # Token type in the response header (usually "Bearer")
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
     # Token type claim in the token payload
-    'TOKEN_TYPE_CLAIM': 'token_type',
-    
+    "TOKEN_TYPE_CLAIM": "token_type",
     # User ID claim in the token payload
-    'USER_ID_FIELD': 'id',
-    'USER_ID_CLAIM': 'user_id',
+    "USER_ID_FIELD": "id",
+    "USER_ID_CLAIM": "user_id",
 }
-
 
 
 # Password validation
