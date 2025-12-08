@@ -16,27 +16,9 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class RegistrationView(APIView):
-    """
-    User Registration View
-    Allows new users to create an account
-    No authentication required - anyone can register
-    """
 
     def post(self, request):
-        """
-        POST /api/auth/register/
 
-        Request body:
-        {
-            "username": "john_doe",
-            "email": "john@example.com",
-            "password": "securepassword123"
-        }
-
-        Returns:
-        - 201 Created: User successfully registered
-        - 400 Bad Request: Validation errors (e.g., username already exists)
-        """
         # Validate the incoming data using our serializer
         serializer = RegisterSerializer(data=request.data)
 
@@ -60,26 +42,9 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
-    """
-    User Login View
-    Authenticates user and returns JWT tokens
-    No authentication required - this is how users get their tokens
-    """
 
     def post(self, request):
-        """
-        POST /api/auth/login/
 
-        Request body:
-        {
-            "username": "john_doe",
-            "password": "securepassword123"
-        }
-
-        Returns:
-        - 200 OK: Login successful with access and refresh tokens
-        - 400 Bad Request: Invalid credentials
-        """
         # Get username and password from request
         username = request.data.get("username")
         password = request.data.get("password")
@@ -122,32 +87,13 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    """
-    User Logout View
-    Blacklists the refresh token so it can't be used again
-    User must be authenticated to logout
-    """
 
     # Use JWT authentication instead of Token authentication
     authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
-        """
-        POST /api/auth/logout/
 
-        Headers:
-        Authorization: Bearer <access_token>
-
-        Request body:
-        {
-            "refresh": "<refresh_token>"
-        }
-
-        Returns:
-        - 200 OK: Logout successful, refresh token blacklisted
-        - 400 Bad Request: Refresh token not provided or invalid
-        """
         try:
             # Get the refresh token from request body
             refresh_token = request.data.get("refresh")

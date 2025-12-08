@@ -16,16 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class TodoView(APIView):
-    """
-    Todo View - Handles all HTTP methods for Todo operations
-
-    Authentication: JWT (JSON Web Token) required
-    - Include token in request header: Authorization: Bearer <access_token>
-
-    Security: Users can only access their own todos
-    """
-
-    # Use JWT authentication instead of Token authentication
+    
     # JWT tokens are more secure and scalable
     authentication_classes = [JWTAuthentication]
 
@@ -33,14 +24,7 @@ class TodoView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk=None):
-        """
-        GET /api/todo/ - Get all todos for the authenticated user
-        GET /api/todo/<id>/ - Get a specific todo by ID
 
-        Returns:
-        - 200 OK: List of todos or single todo
-        - 404 Not Found: Todo not found or doesn't belong to user
-        """
         if pk is not None:
             # Get a specific todo by ID
             try:
@@ -93,19 +77,7 @@ class TodoView(APIView):
             )
 
     def post(self, request):
-        """
-        POST /api/todo/ - Create a new todo
 
-        Request body:
-        {
-            "title": "My Todo Title",
-            "description": "Detailed description of the todo"
-        }
-
-        Returns:
-        - 201 Created: Todo successfully created
-        - 400 Bad Request: Validation errors
-        """
         try:
             # Get data from request body
             request_data = request.data
@@ -149,20 +121,7 @@ class TodoView(APIView):
             )
 
     def put(self, request, pk=None):
-        """
-        PUT /api/todo/<id>/ - Update an existing todo (full update)
 
-        Request body:
-        {
-            "title": "Updated Title",
-            "description": "Updated description"
-        }
-
-        Returns:
-        - 200 OK: Todo successfully updated
-        - 400 Bad Request: Validation errors
-        - 404 Not Found: Todo not found or doesn't belong to user
-        """
         # Check if todo ID is provided
         if pk is None:
             return Response(
@@ -224,13 +183,7 @@ class TodoView(APIView):
             )
 
     def delete(self, request, pk=None):
-        """
-        DELETE /api/todo/<id>/ - Delete a todo
 
-        Returns:
-        - 200 OK: Todo successfully deleted
-        - 404 Not Found: Todo not found or doesn't belong to user
-        """
         # Check if todo ID is provided
         if pk is None:
             return Response(
