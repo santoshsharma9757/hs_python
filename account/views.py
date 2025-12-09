@@ -13,9 +13,12 @@ from django.contrib.auth import authenticate
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 
 
 class RegistrationView(APIView):
+
+    permission_classes = [AllowAny]
 
     def post(self, request):
 
@@ -42,6 +45,7 @@ class RegistrationView(APIView):
 
 
 class LoginView(APIView):
+    permission_classes = [AllowAny]
 
     def post(self, request):
 

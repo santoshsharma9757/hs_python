@@ -16,7 +16,7 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class TodoView(APIView):
-    
+
     # JWT tokens are more secure and scalable
     authentication_classes = [JWTAuthentication]
 
