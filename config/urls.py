@@ -22,7 +22,7 @@ from config import settings
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("api/", include("todo.urls")),
-    path("api/auth/", include("account.urls")),
-    path("api/", include("kothachahiyo.urls")),
+    path("api/v1/", include("todo.urls")),
+    path("api/v1/", include("account.urls")),
+    path("api/v1/", include("kothachahiyo.urls")),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

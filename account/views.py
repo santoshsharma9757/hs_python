@@ -53,6 +53,7 @@ class LoginView(APIView):
         username = request.data.get("username")
         password = request.data.get("password")
 
+
         # Validate that both fields are provided
         if not username or not password:
             return Response(

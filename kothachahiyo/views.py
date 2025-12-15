@@ -1,11 +1,22 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .serializers import RoomSerializer
-from .models import Room, RoomImage
+from .serializers import RoomSerializer,DistrictSerializer
+from .models import Room, RoomImage, District
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.permissions import IsAuthenticated
 
+
+
+class DistrictView(APIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    def get(self, request):
+        print("request",request)
+        queryset = District.objects.all()
+        serializer = DistrictSerializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
+    
 
 class RoomView(APIView):
 

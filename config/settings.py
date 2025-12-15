@@ -11,21 +11,32 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from decouple import config, Csv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Environment Configuration
+# Set ENVIRONMENT=local for development, ENVIRONMENT=production for live server
+ENVIRONMENT = config("ENVIRONMENT", default="local")
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-&h1+&c8!a1a0w=4e*80trn8@^xy8ar7r+1_u8f1#%b33do1nm9"
+# Get from environment variable, fallback to default (ONLY for local development!)
+SECRET_KEY = config(
+    "SECRET_KEY",
+    default="django-insecure-&h1+&c8!a1a0w=4e*80trn8@^xy8ar7r+1_u8f1#%b33do1nm9",
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# In production, DEBUG must be False!
+DEBUG = config("DEBUG", default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+# Allowed Hosts - comma-separated list in production
+# Example: ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
+ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=Csv())
 
 
 # Application definition
@@ -81,23 +92,41 @@ WSGI_APPLICATION = "config.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# Database configuration based on environment
+DATABASE_ENGINE = config("DATABASE_ENGINE", default="sqlite3")
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'hs_python_db',
-#         'USER': 'django_user',
-#         'PASSWORD': 'Password123!',
-#         'HOST': 'localhost',
-#         'PORT': '3306',
-#     }
-# }
+if DATABASE_ENGINE == "postgresql":
+    # PostgreSQL (Recommended for Production)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": config("DATABASE_NAME", default=""),
+            "USER": config("DATABASE_USER", default=""),
+            "PASSWORD": config("DATABASE_PASSWORD", default=""),
+            "HOST": config("DATABASE_HOST", default="localhost"),
+            "PORT": config("DATABASE_PORT", default="5432"),
+        }
+    }
+elif DATABASE_ENGINE == "mysql":
+    # MySQL (Alternative for Production)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": config("DATABASE_NAME", default=""),
+            "USER": config("DATABASE_USER", default=""),
+            "PASSWORD": config("DATABASE_PASSWORD", default=""),
+            "HOST": config("DATABASE_HOST", default="localhost"),
+            "PORT": config("DATABASE_PORT", default="3306"),
+        }
+    }
+else:
+    # SQLite (Default for Local Development)
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
+    }
 
 
 # Django REST Framework Configuration
@@ -180,6 +209,56 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = "static/"
+STATIC_ROOT = BASE_DIR / "staticfiles"  # For production: collectstatic command
 
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
+# Media files (User uploaded files - Images, etc.)
+# https://docs.djangoproject.com/en/6.0/topics/files/
+
+# Storage Type: 'local' or 'cloud'
+STORAGE_TYPE = config("STORAGE_TYPE", default="local")
+
+if STORAGE_TYPE == "cloud":
+    # Cloud Storage Configuration (Production)
+    # Option 1: AWS S3 (Most Popular)
+    # Uncomment and configure if using AWS S3:
+    # INSTALLED_APPS.append("storages")
+    # DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+    # STATICFILES_STORAGE = "storages.backends.s3boto3.S3StaticStorage"
+    # AWS_ACCESS_KEY_ID = config("AWS_ACCESS_KEY_ID", default="")
+    # AWS_SECRET_ACCESS_KEY = config("AWS_SECRET_ACCESS_KEY", default="")
+    # AWS_STORAGE_BUCKET_NAME = config("AWS_STORAGE_BUCKET_NAME", default="")
+    # AWS_S3_REGION_NAME = config("AWS_S3_REGION_NAME", default="us-east-1")
+    # AWS_S3_CUSTOM_DOMAIN = config("AWS_S3_CUSTOM_DOMAIN", default="")
+    # AWS_S3_FILE_OVERWRITE = False
+    # AWS_DEFAULT_ACL = "public-read"
+    # MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/media/"
+
+    # Option 2: Cloudinary (Easier for Beginners)
+    # Uncomment and configure if using Cloudinary:
+    # INSTALLED_APPS.append("cloudinary")
+    # INSTALLED_APPS.append("cloudinary_storage")
+    # DEFAULT_FILE_STORAGE = "cloudinary_storage.storage.MediaCloudinaryStorage"
+    # import cloudinary
+    # cloudinary.config(
+    #     cloud_name=config("CLOUDINARY_CLOUD_NAME", default=""),
+    #     api_key=config("CLOUDINARY_API_KEY", default=""),
+    #     api_secret=config("CLOUDINARY_API_SECRET", default=""),
+    # )
+
+    # For now, fallback to local if cloud storage not configured
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
+else:
+    # Local Storage (Development)
+    MEDIA_URL = "/media/"
+    MEDIA_ROOT = BASE_DIR / "media"
+
+# Security Settings for Production
+if ENVIRONMENT == "production":
+    # Security settings that should be enabled in production
+    SECURE_SSL_REDIRECT = config("SECURE_SSL_REDIRECT", default=False, cast=bool)
+    SESSION_COOKIE_SECURE = config("SESSION_COOKIE_SECURE", default=True, cast=bool)
+    CSRF_COOKIE_SECURE = config("CSRF_COOKIE_SECURE", default=True, cast=bool)
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = "DENY"
