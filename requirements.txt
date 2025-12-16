@@ -22,3 +22,4 @@ Pillow>=10.0.0
 
 # Security (for production)
 # django-cors-headers>=4.3.0  # If you need CORS support
+
