@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     # This is required for secure logout functionality
     "rest_framework_simplejwt.token_blacklist",
     "kothachahiyo",
+    "culture_tourism"
 ]
 
 MIDDLEWARE = [
