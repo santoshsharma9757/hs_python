@@ -43,9 +43,12 @@ ALLOWED_HOSTS = [
     "34.30.212.72",
 ]
 
+CORS_ALLOW_CREDENTIALS = True
+
 CSRF_TRUSTED_ORIGINS = [
     "https://api.hamrosubidha.com",
     "https://www.hamrosubidha.com",
+    "https://hamrosubidha.com",  # <--- Add this one
 ]
 
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
@@ -85,13 +88,18 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# To allow everyone (for testing)
-CORS_ALLOW_ALL_ORIGINS = False 
-
-# OR Allow specific domains (recommended for production)
-CORS_ALLOWED_ORIGINS = [
-    "https://www.hamrosubidha.com",
-]
+if DEBUG:
+    # 1. LOCAL DEVELOPMENT SOLUTION
+    # This allows any port (like 57032, 58000, etc.) from localhost
+    CORS_ALLOW_ALL_ORIGINS = True 
+else:
+    # 2. REAL RELEASE SOLUTION
+    # Only your real website domains are allowed in production
+    CORS_ALLOW_ALL_ORIGINS = False
+    CORS_ALLOWED_ORIGINS = [
+        "https://www.hamrosubidha.com",
+        "https://hamrosubidha.com",
+    ]
 
 
 ROOT_URLCONF = "config.urls"
