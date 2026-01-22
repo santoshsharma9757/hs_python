@@ -36,7 +36,7 @@ DEBUG = config("DEBUG", default=True, cast=bool)
 
 # Allowed Hosts - comma-separated list in production
 # Example: ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-ALLOWED_HOSTS = config("ALLOWED_HOSTS", default="*", cast=Csv())
+ALLOWED_HOSTS = ["hamrosubidha.com", "www.hamrosubidha.com", "34.30.212.72","*"]
 
 
 # Application definition
