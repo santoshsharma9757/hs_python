@@ -36,7 +36,20 @@ DEBUG = config("DEBUG", default=True, cast=bool)
 
 # Allowed Hosts - comma-separated list in production
 # Example: ALLOWED_HOSTS=yourdomain.com,www.yourdomain.com
-ALLOWED_HOSTS = ["hamrosubidha.com", "www.hamrosubidha.com", "34.30.212.72","*"]
+ALLOWED_HOSTS = [
+    "api.hamrosubidha.com",
+    # keep these only if you still want direct access:
+    "hamrosubidha.com",
+    "34.30.212.72",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://api.hamrosubidha.com",
+    "https://www.hamrosubidha.com",
+]
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
 
 
 # Application definition
@@ -77,19 +90,9 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 # OR Allow specific domains (recommended for production)
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
-    "http://127.0.0.1:8000",
-    "https://hamrosubidha.com",
-    "https://www.hamrosubidha.com",
-    # Add your production domain here
-]
-
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
-
-CSRF_TRUSTED_ORIGINS = [
-    "https://hamrosubidha.com",
     "https://www.hamrosubidha.com",
 ]
+
 
 ROOT_URLCONF = "config.urls"
 
