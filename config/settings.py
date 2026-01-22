@@ -86,7 +86,7 @@ MIDDLEWARE = [
 ]
 
 # To allow everyone (for testing)
-CORS_ALLOW_ALL_ORIGINS = True 
+CORS_ALLOW_ALL_ORIGINS = False 
 
 # OR Allow specific domains (recommended for production)
 CORS_ALLOWED_ORIGINS = [
