@@ -22,7 +22,6 @@ from django.conf.urls.static import static
 from config import settings
 
 urlpatterns = [
-    path("", lambda request: JsonResponse({"status": "ok", "api": "/api/v1/"})),
     path("admin/", admin.site.urls),
     path("api/v1/", include("todo.urls")),
     path("api/v1/", include("account.urls")),
