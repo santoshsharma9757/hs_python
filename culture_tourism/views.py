@@ -1,11 +1,12 @@
 from rest_framework import generics, permissions
-from .models import Cities, Tourism, CultureAndTradition, Food
+from .models import Cities, Tourism, CultureAndTradition, Food, TripPlanner
 from .serializers import (
     CitiesSerializer, 
     TourismListSerializer, 
     TourismDetailSerializer,
     CultureAndTraditionSerializer,
-    FoodSerializer
+    FoodSerializer,
+    TripPlannerSerializer
 )
 
 class CitiesListAPIView(generics.ListAPIView):
@@ -47,4 +48,20 @@ class FoodListAPIView(generics.ListAPIView):
 class FoodDetailAPIView(generics.RetrieveAPIView):
     queryset = Food.objects.all()
     serializer_class = FoodSerializer
+    permission_classes = [permissions.AllowAny]
+
+class TripPlannerListAPIView(generics.ListAPIView):
+    serializer_class = TripPlannerSerializer
+    permission_classes = [permissions.AllowAny]
+
+    def get_queryset(self):
+        queryset = TripPlanner.objects.all()
+        tourism_id = self.request.query_params.get('tourism_id')
+        if tourism_id:
+            queryset = queryset.filter(tourism_id=tourism_id)
+        return queryset
+
+class TripPlannerDetailAPIView(generics.RetrieveAPIView):
+    queryset = TripPlanner.objects.all()
+    serializer_class = TripPlannerSerializer
     permission_classes = [permissions.AllowAny]

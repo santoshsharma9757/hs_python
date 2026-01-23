@@ -6,7 +6,9 @@ from .views import (
     CultureAndTraditionListAPIView,
     CultureAndTraditionDetailAPIView,
     FoodListAPIView,
-    FoodDetailAPIView
+    FoodDetailAPIView,
+    TripPlannerListAPIView,
+    TripPlannerDetailAPIView
 )
 
 urlpatterns = [
@@ -17,4 +19,6 @@ urlpatterns = [
     path('culture/<uuid:pk>/', CultureAndTraditionDetailAPIView.as_view(), name='culture-detail'),
     path('food/', FoodListAPIView.as_view(), name='food-list'),
     path('food/<uuid:pk>/', FoodDetailAPIView.as_view(), name='food-detail'),
+    path('trip-planner/', TripPlannerListAPIView.as_view(), name='trip-planner-list'),
+    path('trip-planner/<uuid:pk>/', TripPlannerDetailAPIView.as_view(), name='trip-planner-detail'),
 ]
