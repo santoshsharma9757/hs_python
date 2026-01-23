@@ -14,7 +14,7 @@ class TourismAdmin(admin.ModelAdmin):
 
 @admin.register(TripPlanner)
 class TripPlannerAdmin(admin.ModelAdmin):
-    list_display = ('name', 'contact_person_name', 'mobile', 'id')
+    list_display = ('name', 'tourism', 'contact_person_name', 'mobile', 'id')
     search_fields = ('name', 'contact_person_name', 'mobile')
 
 @admin.register(CultureAndTradition)

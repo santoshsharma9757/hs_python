@@ -41,6 +41,7 @@ ALLOWED_HOSTS = [
     # keep these only if you still want direct access:
     "hamrosubidha.com",
     "34.30.212.72",
+    "127.0.0.1"
 ]
 
 CORS_ALLOW_CREDENTIALS = True

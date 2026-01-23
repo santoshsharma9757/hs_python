@@ -23,7 +23,7 @@ class Tourism(models.Model):
         return self.name
 
 class TripPlanner(models.Model):
-    # tourism = models.ForeignKey(Tourism,on_delete=models.CASCADE,related_name='trip_planner')
+    tourism = models.ForeignKey(Tourism, on_delete=models.CASCADE, related_name='trip_planner', null=True, blank=True)
     id = models.UUIDField(primary_key=True,default=uuid4, editable=False)
     name = models.CharField(max_length=200)
     banner = models.ImageField(upload_to="banner",blank=True,null=True)
